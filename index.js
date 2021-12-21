@@ -69,21 +69,24 @@ async function run(){
 
         })
 
-        // get single order 
-        // app.get('/orders/:id',async(req,res)=>{
-        //     const id = req.params.id;
-        //     // const query = { _id:ObjectId(id) };
-        //     // const result = await orderCollections.deleteOne(query);
-        //     console.log('getting id:',id);
-        //     res.json('getting')
-        // })
 
-        // delete order 
+         // update status 
+        app.put('/orders',async(req,res)=>{
+            const id = req.body._id;
+            const status = req.body.status;
+            console.log('update data :',id,status);
+            const filter = { _id:ObjectId(id)};
+            const options = { upsert: true };
+            const updateDoc = { $set: {status: status} };
+            const result = await orderCollections.updateOne(filter, updateDoc,options);
+            res.json(result);
+        })
+
+         // delete order 
         app.delete('/orders/:id',async(req,res)=>{
             const id = req.params.id;
             const query = { _id:ObjectId(id) };
-            const result = await orderCollections.deleteOne(query);
-            console.log('deleting id:',result);
+            const result = await orderCollections.deleteOne(query)
             res.json(result)
         })
 
